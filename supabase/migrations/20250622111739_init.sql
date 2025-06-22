@@ -1,0 +1,329 @@
+revoke delete on table "public"."makers" from "anon";
+
+revoke insert on table "public"."makers" from "anon";
+
+revoke references on table "public"."makers" from "anon";
+
+revoke select on table "public"."makers" from "anon";
+
+revoke trigger on table "public"."makers" from "anon";
+
+revoke truncate on table "public"."makers" from "anon";
+
+revoke update on table "public"."makers" from "anon";
+
+revoke delete on table "public"."makers" from "authenticated";
+
+revoke insert on table "public"."makers" from "authenticated";
+
+revoke references on table "public"."makers" from "authenticated";
+
+revoke select on table "public"."makers" from "authenticated";
+
+revoke trigger on table "public"."makers" from "authenticated";
+
+revoke truncate on table "public"."makers" from "authenticated";
+
+revoke update on table "public"."makers" from "authenticated";
+
+revoke delete on table "public"."makers" from "service_role";
+
+revoke insert on table "public"."makers" from "service_role";
+
+revoke references on table "public"."makers" from "service_role";
+
+revoke select on table "public"."makers" from "service_role";
+
+revoke trigger on table "public"."makers" from "service_role";
+
+revoke truncate on table "public"."makers" from "service_role";
+
+revoke update on table "public"."makers" from "service_role";
+
+revoke delete on table "public"."organization_units" from "anon";
+
+revoke insert on table "public"."organization_units" from "anon";
+
+revoke references on table "public"."organization_units" from "anon";
+
+revoke select on table "public"."organization_units" from "anon";
+
+revoke trigger on table "public"."organization_units" from "anon";
+
+revoke truncate on table "public"."organization_units" from "anon";
+
+revoke update on table "public"."organization_units" from "anon";
+
+revoke delete on table "public"."organization_units" from "authenticated";
+
+revoke insert on table "public"."organization_units" from "authenticated";
+
+revoke references on table "public"."organization_units" from "authenticated";
+
+revoke select on table "public"."organization_units" from "authenticated";
+
+revoke trigger on table "public"."organization_units" from "authenticated";
+
+revoke truncate on table "public"."organization_units" from "authenticated";
+
+revoke update on table "public"."organization_units" from "authenticated";
+
+revoke delete on table "public"."organization_units" from "service_role";
+
+revoke insert on table "public"."organization_units" from "service_role";
+
+revoke references on table "public"."organization_units" from "service_role";
+
+revoke select on table "public"."organization_units" from "service_role";
+
+revoke trigger on table "public"."organization_units" from "service_role";
+
+revoke truncate on table "public"."organization_units" from "service_role";
+
+revoke update on table "public"."organization_units" from "service_role";
+
+revoke delete on table "public"."vehicles" from "anon";
+
+revoke insert on table "public"."vehicles" from "anon";
+
+revoke references on table "public"."vehicles" from "anon";
+
+revoke select on table "public"."vehicles" from "anon";
+
+revoke trigger on table "public"."vehicles" from "anon";
+
+revoke truncate on table "public"."vehicles" from "anon";
+
+revoke update on table "public"."vehicles" from "anon";
+
+revoke delete on table "public"."vehicles" from "authenticated";
+
+revoke insert on table "public"."vehicles" from "authenticated";
+
+revoke references on table "public"."vehicles" from "authenticated";
+
+revoke select on table "public"."vehicles" from "authenticated";
+
+revoke trigger on table "public"."vehicles" from "authenticated";
+
+revoke truncate on table "public"."vehicles" from "authenticated";
+
+revoke update on table "public"."vehicles" from "authenticated";
+
+revoke delete on table "public"."vehicles" from "service_role";
+
+revoke insert on table "public"."vehicles" from "service_role";
+
+revoke references on table "public"."vehicles" from "service_role";
+
+revoke select on table "public"."vehicles" from "service_role";
+
+revoke trigger on table "public"."vehicles" from "service_role";
+
+revoke truncate on table "public"."vehicles" from "service_role";
+
+revoke update on table "public"."vehicles" from "service_role";
+
+alter table "public"."organization_units" drop constraint "organization_units_organization_id_fkey";
+
+alter table "public"."vehicles" drop constraint "vehicles_maker_id_fkey";
+
+alter table "public"."vehicles" drop constraint "vehicles_organization_unit_id_fkey";
+
+alter table "public"."makers" drop constraint "makers_pkey";
+
+alter table "public"."organization_units" drop constraint "organization_units_pkey";
+
+alter table "public"."vehicles" drop constraint "vehicles_pkey";
+
+drop index if exists "public"."makers_pkey";
+
+drop index if exists "public"."organization_units_pkey";
+
+drop index if exists "public"."vehicles_pkey";
+
+drop table "public"."makers";
+
+drop table "public"."organization_units";
+
+drop table "public"."vehicles";
+
+create table "public"."customers" (
+    "id" bigint generated by default as identity not null,
+    "created_at" timestamp with time zone not null default now(),
+    "project_id" bigint,
+    "full_name" text
+);
+
+
+alter table "public"."customers" enable row level security;
+
+create table "public"."meters" (
+    "id" bigint generated by default as identity not null,
+    "created_at" timestamp with time zone not null default now(),
+    "customer_id" bigint
+);
+
+
+alter table "public"."meters" enable row level security;
+
+create table "public"."projects" (
+    "id" bigint generated by default as identity not null,
+    "created_at" timestamp with time zone not null default now(),
+    "organization_id" bigint
+);
+
+
+alter table "public"."projects" enable row level security;
+
+CREATE UNIQUE INDEX customers_pkey ON public.customers USING btree (id);
+
+CREATE UNIQUE INDEX meters_pkey ON public.meters USING btree (id);
+
+CREATE UNIQUE INDEX projects_pkey ON public.projects USING btree (id);
+
+alter table "public"."customers" add constraint "customers_pkey" PRIMARY KEY using index "customers_pkey";
+
+alter table "public"."meters" add constraint "meters_pkey" PRIMARY KEY using index "meters_pkey";
+
+alter table "public"."projects" add constraint "projects_pkey" PRIMARY KEY using index "projects_pkey";
+
+alter table "public"."customers" add constraint "customers_project_id_fkey" FOREIGN KEY (project_id) REFERENCES projects(id) not valid;
+
+alter table "public"."customers" validate constraint "customers_project_id_fkey";
+
+alter table "public"."meters" add constraint "meters_customer_id_fkey" FOREIGN KEY (customer_id) REFERENCES customers(id) not valid;
+
+alter table "public"."meters" validate constraint "meters_customer_id_fkey";
+
+alter table "public"."projects" add constraint "projects_organization_id_fkey" FOREIGN KEY (organization_id) REFERENCES organizations(id) not valid;
+
+alter table "public"."projects" validate constraint "projects_organization_id_fkey";
+
+grant delete on table "public"."customers" to "anon";
+
+grant insert on table "public"."customers" to "anon";
+
+grant references on table "public"."customers" to "anon";
+
+grant select on table "public"."customers" to "anon";
+
+grant trigger on table "public"."customers" to "anon";
+
+grant truncate on table "public"."customers" to "anon";
+
+grant update on table "public"."customers" to "anon";
+
+grant delete on table "public"."customers" to "authenticated";
+
+grant insert on table "public"."customers" to "authenticated";
+
+grant references on table "public"."customers" to "authenticated";
+
+grant select on table "public"."customers" to "authenticated";
+
+grant trigger on table "public"."customers" to "authenticated";
+
+grant truncate on table "public"."customers" to "authenticated";
+
+grant update on table "public"."customers" to "authenticated";
+
+grant delete on table "public"."customers" to "service_role";
+
+grant insert on table "public"."customers" to "service_role";
+
+grant references on table "public"."customers" to "service_role";
+
+grant select on table "public"."customers" to "service_role";
+
+grant trigger on table "public"."customers" to "service_role";
+
+grant truncate on table "public"."customers" to "service_role";
+
+grant update on table "public"."customers" to "service_role";
+
+grant delete on table "public"."meters" to "anon";
+
+grant insert on table "public"."meters" to "anon";
+
+grant references on table "public"."meters" to "anon";
+
+grant select on table "public"."meters" to "anon";
+
+grant trigger on table "public"."meters" to "anon";
+
+grant truncate on table "public"."meters" to "anon";
+
+grant update on table "public"."meters" to "anon";
+
+grant delete on table "public"."meters" to "authenticated";
+
+grant insert on table "public"."meters" to "authenticated";
+
+grant references on table "public"."meters" to "authenticated";
+
+grant select on table "public"."meters" to "authenticated";
+
+grant trigger on table "public"."meters" to "authenticated";
+
+grant truncate on table "public"."meters" to "authenticated";
+
+grant update on table "public"."meters" to "authenticated";
+
+grant delete on table "public"."meters" to "service_role";
+
+grant insert on table "public"."meters" to "service_role";
+
+grant references on table "public"."meters" to "service_role";
+
+grant select on table "public"."meters" to "service_role";
+
+grant trigger on table "public"."meters" to "service_role";
+
+grant truncate on table "public"."meters" to "service_role";
+
+grant update on table "public"."meters" to "service_role";
+
+grant delete on table "public"."projects" to "anon";
+
+grant insert on table "public"."projects" to "anon";
+
+grant references on table "public"."projects" to "anon";
+
+grant select on table "public"."projects" to "anon";
+
+grant trigger on table "public"."projects" to "anon";
+
+grant truncate on table "public"."projects" to "anon";
+
+grant update on table "public"."projects" to "anon";
+
+grant delete on table "public"."projects" to "authenticated";
+
+grant insert on table "public"."projects" to "authenticated";
+
+grant references on table "public"."projects" to "authenticated";
+
+grant select on table "public"."projects" to "authenticated";
+
+grant trigger on table "public"."projects" to "authenticated";
+
+grant truncate on table "public"."projects" to "authenticated";
+
+grant update on table "public"."projects" to "authenticated";
+
+grant delete on table "public"."projects" to "service_role";
+
+grant insert on table "public"."projects" to "service_role";
+
+grant references on table "public"."projects" to "service_role";
+
+grant select on table "public"."projects" to "service_role";
+
+grant trigger on table "public"."projects" to "service_role";
+
+grant truncate on table "public"."projects" to "service_role";
+
+grant update on table "public"."projects" to "service_role";
+
+
