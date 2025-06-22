@@ -1,56 +1,50 @@
-# 🚚 Fleet Tracker
+# ⚡ Energy Tracker
 
-Fleet Tracker is a Supabase-powered platform designed to manage and monitor fleets of vehicles. It provides a structured database schema to represent organizations, units, and the vehicles they operate.
-
-## 📦 Tech Stack
-
-- **Supabase** (PostgreSQL + Auth + Storage)
-- **OpenTofu/Terraform** for infrastructure provisioning
-- **Supabase CLI** for migrations and deployment
-- **PostgreSQL** as the core data layer
+**Energy Tracker** is a backend platform designed to help organizations monitor and manage energy usage across multiple projects, meters, and customers. Built with Supabase and PostgreSQL, it supports structured data collection, relational mapping, and role-based access.
 
 ---
 
-## 🗂️ Database Schema Overview
+## 🏗️ Tech Stack
 
-### Tables:
+- [Supabase](https://supabase.com/) — open-source Firebase alternative (PostgreSQL, Auth, Realtime)
+- Supabase CLI for local development and migrations
+- PostgreSQL (hosted by Supabase)
+- Terraform/OpenTofu for infrastructure provisioning (optional)
+
+---
+
+## 🗃️ Database Schema Overview
+
+### Tables
 
 #### `organizations`
-Stores top-level entities representing companies or clients that own fleets.
+Top-level entity representing an energy provider or client company.
 
-#### `organization_units`
-Subdivisions under each organization (e.g., departments, branches, or regional units).
+| Column     | Type         | Description                        |
+|------------|--------------|------------------------------------|
+| `id`       | `int8`       | Primary key                        |
+| `created_at` | `timestamptz` | Record creation timestamp         |
+| `name`     | `text`       | Organization name                  |
 
-#### `makers`
-Vehicle manufacturers or brands.
+---
+
+#### `projects`
+A project under an organization — could represent a facility, building, or regional site.
+
+#### `customers`
+Represents energy users or clients tied to a project or organization.
+
+#### `meters`
+Device-level table — each row likely represents a physical energy meter collecting consumption data.
 
 #### `profiles`
-User profiles associated with the platform. Likely tied to Supabase Auth users.
-
-#### `vehicles`
-Records of vehicles in the fleet.
-
-| Column              | Type         | Description                          |
-|---------------------|--------------|--------------------------------------|
-| `id`                | `int8`       | Primary key                          |
-| `created_at`        | `timestamptz`| Timestamp when the record was added |
-| `plate_number`      | `text`       | Vehicle's license plate              |
-| `maker_id`          | `int8`       | Foreign key to `makers`             |
-| `organization_unit_id` | `int8`    | Foreign key to `organization_units` |
+User profiles, typically linked to Supabase Auth. Could support admin/staff/customer roles.
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Deploy with Terraform
+### 1. Clone & Install Supabase CLI
 
 ```bash
-# Set required variables
-export TF_VAR_supabase_token=your_token
-export TF_VAR_supabase_org_id=your_org_id
-export TF_VAR_supabase_region=your_region
-export TF_VAR_supabase_db_password=your_password
-
-# Deploy
-tofu init
-tofu apply
+npm install -g supabase
