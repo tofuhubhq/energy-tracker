@@ -1,6 +1,6 @@
 {
   "name": "energy-tracker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Deploys an energy tracking web panel",
   "repository": "https://github.com/tofuhubhq/energy-tracker.git",
   "homepage": "https://tofuhub.co",
