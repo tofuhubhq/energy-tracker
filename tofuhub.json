@@ -1,7 +1,7 @@
 {
   "name": "energy-tracker",
   "version": "0.0.1",
-  "description": "Deploys a fleet tracking web panel",
+  "description": "Deploys an energy tracking web panel",
   "repository": "https://github.com/tofuhubhq/energy-tracker.git",
   "homepage": "https://tofuhub.co",
   "author": "Tommaso Girotto",
